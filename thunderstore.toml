@@ -6,7 +6,7 @@ schemaVersion = "0.0.1"
 namespace = "zerp"
 name = "CauldronFishing"
 versionNumber = "0.0.1"
-description = "Allows to do some super duper thing."
+description = "Allows you to fish in the Crossroads Cauldron"
 websiteUrl = "https://github.com/adi1998/CauldronFishing"
 containsNsfwContent = false
 
