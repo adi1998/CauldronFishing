@@ -13,22 +13,29 @@ function mod.SpawnCauldronFishing()
 		local CauldronId = 558175 -- CriticalItemWorldObject01
 		local offsetY = -110
 		local offsetX = 10
-		mod.FishingPointID = SpawnObstacle({Name="FishingPoint", DestinationId=CauldronId, OffsetY=offsetY, Scale=0.2})
+		mod.FishingPointID = SpawnObstacle({Name="FishingPoint", DestinationId=CauldronId, OffsetY=offsetY, Scale=0.2, OffsetX = offsetX})
+		table.insert(game.GlobalVoiceLines.FishNotCaughtReactionLines,mod.hectateFishingSuccessReactions)
 	end
 end
 
-local hectateFishingSuccessReactions = {
+mod.hectateFishingSuccessReactions = {
 	{
 		RandomRemaining = true,
-		PreLineWait = 0.35,
+		PreLineWait = 0.65,
 		ChanceToPlay = 1,
-		GameStateRequirements = {
+		AllowTalkOverTextLines = true,
+		Queue = "Interrupt",
+		ObjectType = "NPC_Hecate_01",
+		Cooldowns =
 			{
-				FunctionName = "RequiredAlive",
-				FunctionArgs = { Units = { "NPC_Hecate_01", }, Alive = true },
-			}
-		},
-		Source = { LineHistoryName = "NPC_Hecate_01", SubtitleColor = Color.HecateVoice },
+			},
+		-- GameStateRequirements = {
+		-- 	{
+		-- 		FunctionName = "RequiredAlive",
+		-- 		FunctionArgs = { Units = { "NPC_Hecate_01", }, Alive = true },
+		-- 	}
+		-- },
+		-- Source = { LineHistoryName = "NPC_Hecate_01", SubtitleColor = Color.HecateVoice },
 		{ Cue = "/VO/Hecate_0610", Text = "You'd use our cauldron thus?" },
 		{ Cue = "/VO/Hecate_0611", Text = "An odd use of our craft." },
 		{ Cue = "/VO/Hecate_0613", Text = "A Witch ought to eat..." },
@@ -42,8 +49,10 @@ local hectateFishingSuccessReactions = {
 local hectateFishingFailureReactions = {
 	{
 		RandomRemaining = true,
-		PreLineWait = 0.35,
+		PreLineWait = 0.85,
 		ChanceToPlay = 1,
+		Queue = "Interrupt",
+		AllowTalkOverTextLines = true,
 		GameStateRequirements = {
 			{
 				FunctionName = "RequiredAlive",
@@ -64,7 +73,7 @@ local hectateFishingFailureReactions = {
 function mod.PlayHecateFailureVO()
 
 	print("HecateFailureVO")
-	thread(PlayVoiceLines, hectateFishingFailureReactions, true)
+	thread(PlayVoiceLines, hectateFishingSuccessReactions, true)
 	print("HecateFailureVO2")
 end
 
