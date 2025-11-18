@@ -13,8 +13,48 @@ function mod.SpawnCauldronFishing()
 		local CauldronId = 558175 -- CriticalItemWorldObject01
 		local offsetY = -110
 		local offsetX = 10
-		SpawnObstacle({Name="FishingPoint", DestinationId=CauldronId, OffsetY=offsetY, Scale=0.2})
+		mod.FishingPointID = SpawnObstacle({Name="FishingPoint", DestinationId=CauldronId, OffsetY=offsetY, Scale=0.2})
 	end
+end
+
+local hectateFishingSuccessReactions = {
+	{
+		RandomRemaining = true,
+		PreLineWait = 0.25,
+		ChanceToPlay = 1,
+		GameStateRequirements = {
+			{
+				FunctionName = "RequiredAlive",
+				FunctionArgs = { Units = { "NPC_Hecate_01", }, Alive = true },
+			}
+		},
+		Source = { LineHistoryName = "NPC_Hecate_01", SubtitleColor = Color.HecateVoice },
+		{ Cue = "/VO/Hecate_0610", Text = "You'd use our cauldron thus?" , Source = { LineHistoryName = "NPC_Hecate_01", SubtitleColor = Color.HecateVoice }},
+		{ Cue = "/VO/Hecate_0611", Text = "An odd use of our craft." , Source = { LineHistoryName = "NPC_Hecate_01", SubtitleColor = Color.HecateVoice }},
+		-- { Cue = "/VO/Hecate_0612", Text = "A foreign incantation of some sort." , Source = { LineHistoryName = "NPC_Hecate_01", SubtitleColor = Color.HecateVoice }},
+		{ Cue = "/VO/Hecate_0613", Text = "A Witch ought to eat..." , Source = { LineHistoryName = "NPC_Hecate_01", SubtitleColor = Color.HecateVoice }},
+		
+	}
+}
+
+local hectateFishingFailureReactions = {
+	{
+		RandomRemaining = true,
+		PreLineWait = 0.25,
+		ChanceToPlay = 1,
+		GameStateRequirements = {
+			{
+				FunctionName = "RequiredAlive",
+				FunctionArgs = { Units = { "NPC_Hecate_01", }, Alive = true },
+			}
+		},
+	}
+}
+
+function mod.PlayHecateVO()
+
+	print("HecateVO")
+	thread(PlayVoiceLines, hectateFishingSuccessReactions, true)
 end
 
 modutil.mod.Path.Wrap("StartDeathLoopPresentation", function(base, source, args)
@@ -31,12 +71,21 @@ modutil.mod.Path.Wrap("EnterHubRoomPresentation", function(base, source, args)
     base(source, args)
 end)
 
+function mod.CheckForNoGifting()
+	local inactiveFishingPoints = GetInactiveIdsByType({Name = "FishingPoint"})
+	print("idlen", #inactiveFishingPoints)
+	local isGiftingActive = false
+	local GiftingFishingId = 585640
+	return Contains(inactiveFishingPoints, GiftingFishingId)
+end
+
 modutil.mod.Path.Wrap("GetCurrentFishingBiomeName", function(base,source,args)
-	if game.CurrentHubRoom ~= nil and game.CurrentHubRoom.Name == "Hub_Main" then
-		local FishBiomeList = {"F","G","H","I","N","O","P","Q","Chaos"}
+	if game.CurrentHubRoom ~= nil and game.CurrentHubRoom.Name == "Hub_Main" and mod.CheckForNoGifting() then
+		mod.PlayHecateVO()
+		local FishBiomeList = {"F", "G", "H", "I", "N", "O", "P", "Q", "Chaos"}
 		local randomIndex = math.random(1, #FishBiomeList)
 		local randomFishBiome = FishBiomeList[randomIndex]
-		print("fishbiome:",randomFishBiome)
+		print("fishbiome:", randomFishBiome)
 		return randomFishBiome
 	end
 	return base(source,args)
