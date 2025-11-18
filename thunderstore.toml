@@ -1,11 +1,11 @@
 [config]
-schemaVersion = "0.0.1"
+schemaVersion = "0.0.2"
 
 
 [package]
 namespace = "zerp"
 name = "CauldronFishing"
-versionNumber = "0.0.1"
+versionNumber = "0.0.2"
 description = "Allows you to fish in the Crossroads Cauldron"
 websiteUrl = "https://github.com/adi1998/CauldronFishing"
 containsNsfwContent = false
