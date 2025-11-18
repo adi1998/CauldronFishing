@@ -6,8 +6,6 @@
 
 - Hecate now reacts to the outcome.
 
-## [Unreleased]
-
 ## [0.0.1] - 2025-11-17
 
 ### Added
