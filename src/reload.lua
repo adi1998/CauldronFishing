@@ -12,9 +12,9 @@ function mod.SpawnCauldronFishing()
 	if game.CurrentHubRoom.Name == "Hub_Main" and #LidId == 0 then
 		local CauldronId = 558175 -- CriticalItemWorldObject01
 		local offsetY = -110
-		local offsetX = 10
+		local offsetX = 5
 		mod.FishingPointID = SpawnObstacle({Name="FishingPoint", DestinationId=CauldronId, OffsetY=offsetY, Scale=0.2, OffsetX = offsetX})
-		table.insert(game.GlobalVoiceLines.FishNotCaughtReactionLines,mod.hectateFishingSuccessReactions)
+		table.insert(game.GlobalVoiceLines.FishNotCaughtReactionLines,mod.hectateFishingFailureReactions)
 	end
 end
 
@@ -29,12 +29,12 @@ mod.hectateFishingSuccessReactions = {
 		Cooldowns =
 			{
 			},
-		-- GameStateRequirements = {
-		-- 	{
-		-- 		FunctionName = "RequiredAlive",
-		-- 		FunctionArgs = { Units = { "NPC_Hecate_01", }, Alive = true },
-		-- 	}
-		-- },
+		GameStateRequirements = {
+			{
+				FunctionName = "RequiredAlive",
+				FunctionArgs = { Units = { "NPC_Hecate_01", }, Alive = true },
+			}
+		},
 		-- Source = { LineHistoryName = "NPC_Hecate_01", SubtitleColor = Color.HecateVoice },
 		{ Cue = "/VO/Hecate_0610", Text = "You'd use our cauldron thus?" },
 		{ Cue = "/VO/Hecate_0611", Text = "An odd use of our craft." },
@@ -46,49 +46,36 @@ mod.hectateFishingSuccessReactions = {
 	}
 }
 
-local hectateFishingFailureReactions = {
+mod.hectateFishingFailureReactions = {
 	{
 		RandomRemaining = true,
-		PreLineWait = 0.85,
+		PreLineWait = 0.65,
 		ChanceToPlay = 1,
-		Queue = "Interrupt",
 		AllowTalkOverTextLines = true,
+		Queue = "Interrupt",
+		ObjectType = "NPC_Hecate_01",
+		Cooldowns =
+			{
+			},
 		GameStateRequirements = {
 			{
 				FunctionName = "RequiredAlive",
 				FunctionArgs = { Units = { "NPC_Hecate_01", }, Alive = true },
 			}
 		},
-		Source = { LineHistoryName = "NPC_Hecate_01", SubtitleColor = Color.HecateVoice },
-		{ Cue = "/VO/Hecate_0613", Text = "Alas" },
+		{ Cue = "/VO/Hecate_0391", Text = "Alas" },
 		{ Cue = "/VO/Hecate_0393", Text = "Outmaneuvered..." },
 		{ Cue = "/VO/Hecate_0390", Text = "{#Emph}Mm, tsk-tsk-tsk." },
 		{ Cue = "/VO/Hecate_0123", Text = "Try something else!" },
 		{ Cue = "/VO/Hecate_0362", Text = "Find anything good?" },
-		{ Cue = "/VO/Hecate_0691", Text = "See that, Sisters?" },
 		{ Cue = "/VO/Hecate_0479", Text = "So it goes at times." },
 	}
 }
 
-function mod.PlayHecateFailureVO()
-
-	print("HecateFailureVO")
-	thread(PlayVoiceLines, hectateFishingSuccessReactions, true)
-	print("HecateFailureVO2")
-end
-
 function mod.PlayHecateSuccessVO()
-
 	print("HecateSuccessVO")
-	thread(PlayVoiceLines, hectateFishingSuccessReactions, true)
+	thread(PlayVoiceLines, mod.hectateFishingSuccessReactions, true)
 end
-
-modutil.mod.Path.Wrap("UseFishingPoint", function(base, source, args)
-	base(source,assert)
-	if mod.CheckCauldronFishing() and game.CurrentRun.Hero.FishingState ~= nil and game.CurrentRun.Hero.FishingState ~= "Success" then
-		mod.PlayHecateFailureVO()
-	end
-end)
 
 modutil.mod.Path.Wrap("StartDeathLoopPresentation", function(base, source, args)
 	mod.SpawnCauldronFishing()
