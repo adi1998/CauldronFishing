@@ -2,11 +2,16 @@
 
 ## [Unreleased]
 
+### Fixed
+
+- Adjusted where Mel is looking during fishing
+- Fixed wraped function arguments
+
 ## [0.0.2] - 2025-11-18
 
 ### Added
 
-- Hecate now reacts to the outcome.
+- Hecate now reacts to the outcome
 
 ## [0.0.1] - 2025-11-17
 
