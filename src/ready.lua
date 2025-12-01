@@ -7,18 +7,6 @@
 -- 	so you will most likely want to have it reference
 --	values and functions later defined in `reload.lua`.
 
-function mod.SpawnCauldronFishing()
-	local LidId = game.GetIdsByType({Name = "CrossroadsCauldronLid01"})
-
-	if game.CurrentHubRoom.Name == "Hub_Main" and #LidId == 0 then
-		mod.CauldronId = 558175 -- CriticalItemWorldObject01
-		local offsetY = -110
-		local offsetX = 5
-		mod.FishingPointId = game.SpawnObstacle({Name="FishingPoint", DestinationId=mod.CauldronId, OffsetY=offsetY, Scale=0.2, OffsetX = offsetX})
-		table.insert(game.GlobalVoiceLines.FishNotCaughtReactionLines,mod.hectateFishingFailureReactions)
-	end
-end
-
 mod.hectateFishingSuccessReactions = {
 	{
 		RandomRemaining = true,
@@ -72,6 +60,18 @@ mod.hectateFishingFailureReactions = {
 		{ Cue = "/VO/Hecate_0479", Text = "So it goes at times." },
 	}
 }
+
+function mod.SpawnCauldronFishing()
+	local LidId = game.GetIdsByType({Name = "CrossroadsCauldronLid01"})
+
+	if game.CurrentHubRoom.Name == "Hub_Main" and #LidId == 0 then
+		mod.CauldronId = 558175 -- CriticalItemWorldObject01
+		local offsetY = -110
+		local offsetX = 5
+		mod.FishingPointId = game.SpawnObstacle({Name="FishingPoint", DestinationId=mod.CauldronId, OffsetY=offsetY, Scale=0.2, OffsetX = offsetX})
+		table.insert(game.GlobalVoiceLines.FishNotCaughtReactionLines,mod.hectateFishingFailureReactions)
+	end
+end
 
 function mod.PlayHecateSuccessVO()
 	print("HecateSuccessVO")
