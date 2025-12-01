@@ -103,10 +103,18 @@ function mod.CheckCauldronFishing()
 	return game.CurrentHubRoom ~= nil and game.CurrentHubRoom.Name == "Hub_Main" and mod.CheckForNoGifting()
 end
 
+function GetKeysFromTable(list)
+    local retval = {}
+    for key, _ in pairs(list) do
+        table.insert(retval, key)
+    end
+    return retval
+end
+
 modutil.mod.Path.Wrap("GetCurrentFishingBiomeName", function(base)
 	if mod.CheckCauldronFishing() then
 		mod.PlayHecateSuccessVO()
-		local FishBiomeList = {"F", "G", "H", "I", "N", "O", "P", "Q", "Chaos"}
+		local FishBiomeList = GetKeysFromTable(game.FishingData.BiomeFish)
 		local randomIndex = math.random(1, #FishBiomeList)
 		local randomFishBiome = FishBiomeList[randomIndex]
 		print("fishbiome:", randomFishBiome)
