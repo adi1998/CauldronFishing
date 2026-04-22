@@ -2,6 +2,9 @@
 
 ## [Unreleased]
 
+- cleanup fishing point on room exit
+- fix incorrect context wrap
+
 ## [0.0.4] - 2025-12-01
 
 ## [0.0.3] - 2025-11-19

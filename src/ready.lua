@@ -74,7 +74,6 @@ function mod.SpawnCauldronFishing()
 end
 
 function mod.PlayHecateSuccessVO()
-	print("HecateSuccessVO")
 	game.thread(game.PlayVoiceLines, mod.hectateFishingSuccessReactions, true)
 end
 
@@ -84,7 +83,6 @@ modutil.mod.Path.Wrap("StartDeathLoopPresentation", function(base, currentRun)
 end)
 
 modutil.mod.Path.Wrap("EnterHubRoomPresentation", function(base, currentRun, currentRoom)
-	print("fishing state:",game.CurrentRun.Hero.FishingState)
 	if game.CurrentRun.Hero.FishingState == nil then
 		mod.SpawnCauldronFishing()
 	end
@@ -93,8 +91,6 @@ end)
 
 function mod.CheckForNoGifting()
 	local inactiveFishingPoints = game.GetInactiveIdsByType({Name = "FishingPoint"})
-	print("idlen", #inactiveFishingPoints)
-	local isGiftingActive = false
 	local GiftingFishingId = 585640
 	return game.Contains(inactiveFishingPoints, GiftingFishingId)
 end
@@ -123,15 +119,20 @@ modutil.mod.Path.Wrap("GetCurrentFishingBiomeName", function(base)
 	return base()
 end)
 
-modutil.mod.Path.Wrap("FishingStartPresentation", function(base,source,args)
-	if args["FishingPointId"] == mod.FishingPointId then
-		modutil.mod.Path.Wrap("AngleTowardTarget", function(base,args)
-			if args["DestinationId"] == mod.FishingPointId then
-				base({ Id = game.CurrentRun.Hero.ObjectId, DestinationId = mod.CauldronId })
-			else
-				base(args)
-			end
-		end)
+modutil.mod.Path.Context.Wrap.Static("FishingStartPresentation", function(...)
+	modutil.mod.Path.Wrap("AngleTowardTarget", function(base, args)
+		if args["DestinationId"] == mod.FishingPointId then
+			base({ Id = game.CurrentRun.Hero.ObjectId, DestinationId = mod.CauldronId })
+		else
+			base(args)
+		end
+	end)
+end)
+
+modutil.mod.Path.Wrap("DeathAreaSwitchRoom", function (base, source, args)
+	if args.Name == "Hub_PreRun" then
+		game.Destroy({Id = mod.FishingPointId})
+		mod.FishingPointId = nil
 	end
-	base(source,args)
+	return base(source, args)
 end)
