@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [0.0.5] - 2026-04-22
+
 - cleanup fishing point on room exit
 - fix incorrect context wrap
 
@@ -26,7 +28,8 @@
 
 - First version of the mod!
 
-[unreleased]: https://github.com/adi1998/CauldronFishing/compare/0.0.4...HEAD
+[unreleased]: https://github.com/adi1998/CauldronFishing/compare/0.0.5...HEAD
+[0.0.5]: https://github.com/adi1998/CauldronFishing/compare/0.0.4...0.0.5
 [0.0.4]: https://github.com/adi1998/CauldronFishing/compare/0.0.3...0.0.4
 [0.0.3]: https://github.com/adi1998/CauldronFishing/compare/0.0.2...0.0.3
 [0.0.2]: https://github.com/adi1998/CauldronFishing/compare/0.0.1...0.0.2
